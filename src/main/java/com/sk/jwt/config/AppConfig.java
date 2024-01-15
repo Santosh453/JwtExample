@@ -3,6 +3,8 @@ package com.sk.jwt.config;
 import com.sk.jwt.services.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,7 +19,7 @@ public class AppConfig {
     public UserDetailsService userDetailsService(){
 
         UserDetails user = User.builder().username("harsh").password(passwordEncoder().encode("harshabc")).roles("ADMIN").build();
-        UserDetails user1 = User.builder().username("rahul").password(passwordEncoder().encode("rahulabc")).roles("ADMIN").build();
+        UserDetails user1 = User.builder().username("rahul").password(passwordEncoder().encode("rahulabc")).build();
         return new InMemoryUserDetailsManager(user,user1);
 
     }
@@ -25,5 +27,10 @@ public class AppConfig {
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration builder) throws Exception {
+        return builder.getAuthenticationManager();
     }
 }
